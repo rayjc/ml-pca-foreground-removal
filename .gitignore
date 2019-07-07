@@ -1,0 +1,5 @@
+input/
+input-preprocessed/
+output/
+__pycache__/
+**/*.pyc
