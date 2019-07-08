@@ -2,9 +2,13 @@ import glob
 import os
 import pickle
 import shutil
+import warnings
 
+import matplotlib.pyplot as plt
 import numpy as np
 import skimage.io, skimage.util, skimage.transform
+
+from contextlib import contextmanager
 
 imgDim = ( 120, 160 )       ## ( 240, 426 ) for 240p on Youtube
 inputDir = "input"
@@ -27,6 +31,8 @@ def constructImageFrames( X, XNew, threshold ):
             os.mkdir( os.path.join( outputDir, bgDir ) )
     assert( X.shape == XNew.shape )
     nRow, nCol = XNew.shape
+    warnings.filterwarnings(action="ignore", category=UserWarning, message=r".*is a low contrast image" )
+    warnings.filterwarnings(action="ignore", category=UserWarning, message=r".*Possible precision loss" )
     for row in range( nRow ):
         skimage.io.imsave( os.path.join( outputDir, bgDir, "frame_bg_{}.jpg".format( row ) ),
                             skimage.util.img_as_ubyte( XNew[ row ].reshape( imgDim ) ) )
@@ -34,6 +40,33 @@ def constructImageFrames( X, XNew, threshold ):
         skimage.io.imsave( os.path.join( outputDir, fgDir, "frame_fg_{}.jpg".format( row ) ),
                             skimage.util.img_as_ubyte( np.where( fgBool, X[ row ], 0.0 ).reshape( imgDim ) ) )
 
+@contextmanager
+def createFigureWrapper():
+    maxWidth, maxHeight = getScreenRes()
+    try:
+        yield plt.figure( figsize=( maxWidth/200.0, maxHeight/200.0 ) )
+    finally:
+        plt.close()
+
+def getScreenRes():
+    window = plt.get_current_fig_manager().window
+    maxWidth, maxHeight = window.wm_maxsize()
+    plt.close()
+    return maxWidth, maxHeight
+
+def plotSeparatedImage( frame, background, threshold, figure, dim=imgDim ):
+    plt.clf()
+    numSubplots = 3
+    ax = [ figure.add_subplot( 1, numSubplots, index + 1 ) for index in range( numSubplots ) ]
+    ax[ 0 ].set_title( "Original Frame" )
+    ax[ 0 ].imshow(frame.reshape( dim ), cmap="gray" )
+    ax[ 1 ].set_title( "Background" )
+    ax[ 1 ].imshow( background.reshape( dim ), cmap="gray" )
+    fgBool = np.logical_not( np.isclose( frame, background, atol=threshold ) )
+    ax[ 2 ].set_title( "Foreground" )
+    ax[ 2 ].imshow( np.where( fgBool, frame, 0.0 ).reshape( dim ), cmap="gray" )
+    plt.show( block=False )
+    plt.pause( 0.001 )
 
 if __name__ == "__main__":
     ## convert any image not in .jpg format to .jpg

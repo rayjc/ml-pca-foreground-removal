@@ -1,7 +1,7 @@
 import numpy as np
+import processFrames
 
 from scipy.optimize import minimize
-from scipy.special import huber
 
 class PCAL1:
     """
@@ -27,15 +27,18 @@ class PCAL1:
         # Randomly initial Z, W
         z = np.random.randn( n * k )
         w = np.random.randn( k * d )
-
-        for i in range( self.iteration ):
-            zResult = minimize( self.zObjFunc, z, args=( w, X, k ),
-                                method="CG", jac=True, options={'maxiter':10} )
-            z, fz = zResult.x, zResult.fun
-            wResult = minimize( self.wObjFunc, w, args=( z, X, k ),
-                                method="CG", jac=True, options={'maxiter':10} )
-            w, fw = wResult.x, wResult.fun
-            print('Iteration %d, loss = %.1f, %.1f' % (i, fz, fw))
+        with processFrames.createFigureWrapper() as fig:
+            for i in range( self.iteration ):
+                zResult = minimize( self.zObjFunc, z, args=( w, X, k ),
+                                    method="CG", jac=True, options={'maxiter':10} )
+                z, fz = zResult.x, zResult.fun
+                wResult = minimize( self.wObjFunc, w, args=( z, X, k ),
+                                    method="CG", jac=True, options={'maxiter':10} )
+                w, fw = wResult.x, wResult.fun
+                print('Iteration %d, loss = %.1f, %.1f' % (i, fz, fw))
+                processFrames.plotSeparatedImage( X[ 0 ] + self.mu,
+                                                    ( z.reshape( n, k ) @ w.reshape(k,d) + self.mu )[ 0 ],
+                                                    0.1, fig, processFrames.imgDim )
 
         self.W = w.reshape(k,d)
 

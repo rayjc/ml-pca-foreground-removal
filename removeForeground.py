@@ -1,7 +1,6 @@
 import pickle
 
 ## 3rd party packages
-import matplotlib.pyplot as plt
 import numpy as np
 
 from pca import PCAL1
