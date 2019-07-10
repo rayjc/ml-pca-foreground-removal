@@ -18,7 +18,7 @@ fgDir = "foreground"
 processedDir = "input-preprocessed"
 outputDataFile = "data.pkl"
 
-def constructImageFrames( X, XNew, threshold ):
+def constructImageFrames( X, XNew, threshold, imgDim, outputName ):
     ## create directories to store the images
     if not os.path.exists( outputDir ):
         os.mkdir( outputDir )
@@ -34,10 +34,10 @@ def constructImageFrames( X, XNew, threshold ):
     warnings.filterwarnings(action="ignore", category=UserWarning, message=r".*is a low contrast image" )
     warnings.filterwarnings(action="ignore", category=UserWarning, message=r".*Possible precision loss" )
     for row in range( nRow ):
-        skimage.io.imsave( os.path.join( outputDir, bgDir, "frame_bg_{}.jpg".format( row ) ),
+        skimage.io.imsave( os.path.join( outputDir, bgDir, "{}_bg_{}.jpg".format( outputName, row ) ),
                             skimage.util.img_as_ubyte( XNew[ row ].reshape( imgDim ) ) )
         fgBool = np.logical_not( np.isclose( X[ row ], XNew[ row ], atol=threshold ) )
-        skimage.io.imsave( os.path.join( outputDir, fgDir, "frame_fg_{}.jpg".format( row ) ),
+        skimage.io.imsave( os.path.join( outputDir, fgDir, "{}_fg_{}.jpg".format( outputName, row ) ),
                             skimage.util.img_as_ubyte( np.where( fgBool, X[ row ], 0.0 ).reshape( imgDim ) ) )
 
 @contextmanager
@@ -54,17 +54,17 @@ def getScreenRes():
     plt.close()
     return maxWidth, maxHeight
 
-def plotSeparatedImage( frame, background, threshold, figure, dim=imgDim ):
+def plotSeparatedImage( frame, background, threshold, figure, imgDim ):
     plt.clf()
     numSubplots = 3
     ax = [ figure.add_subplot( 1, numSubplots, index + 1 ) for index in range( numSubplots ) ]
     ax[ 0 ].set_title( "Original Frame" )
-    ax[ 0 ].imshow(frame.reshape( dim ), cmap="gray" )
+    ax[ 0 ].imshow(frame.reshape( imgDim ), cmap="gray" )
     ax[ 1 ].set_title( "Background" )
-    ax[ 1 ].imshow( background.reshape( dim ), cmap="gray" )
+    ax[ 1 ].imshow( background.reshape( imgDim ), cmap="gray" )
     fgBool = np.logical_not( np.isclose( frame, background, atol=threshold ) )
     ax[ 2 ].set_title( "Foreground" )
-    ax[ 2 ].imshow( np.where( fgBool, frame, 0.0 ).reshape( dim ), cmap="gray" )
+    ax[ 2 ].imshow( np.where( fgBool, frame, 0.0 ).reshape( imgDim ), cmap="gray" )
     plt.show( block=False )
     plt.pause( 0.001 )
 

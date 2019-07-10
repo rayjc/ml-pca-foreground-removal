@@ -18,7 +18,7 @@ class PCAL1:
         self.iteration = iteration
         self.eps = eps
 
-    def _fit( self, X ):
+    def _fit( self, X, imgDim ):
         n,d = X.shape
         k = self.k
         self.mu = np.mean( X, 0 )
@@ -38,7 +38,7 @@ class PCAL1:
                 print('Iteration %d, loss = %.1f, %.1f' % (i, fz, fw))
                 processFrames.plotSeparatedImage( X[ 0 ] + self.mu,
                                                     ( z.reshape( n, k ) @ w.reshape(k,d) + self.mu )[ 0 ],
-                                                    0.1, fig, processFrames.imgDim )
+                                                    0.1, fig, imgDim )
 
         self.W = w.reshape(k,d)
 
@@ -58,8 +58,8 @@ class PCAL1:
         X = Z @ self.W + self.mu
         return X
 
-    def fitTransform( self, X ):
-        self._fit( X )
+    def fitTransform( self, X, imgDim ):
+        self._fit( X, imgDim )
         return self._expand( self._compress( X ) )
 
     def zObjFunc( self, z, w, X, k ):
