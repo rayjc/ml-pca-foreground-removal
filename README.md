@@ -2,7 +2,7 @@
 
 ## Foreground/background Removal
 
-This is an example machine learning application of separating foreground and background through the use of PCA. <br />
+This is an example machine learning application of separating foreground and background through the use of Principal Component Analysis(PCA). <br />
 Usage:
 1. Given a collection of frames of a clip, preprocess or compile these into a _.pkl_ file.
 These images could be any format recognized by _matplotlib_ and could be extracted from a clip using 3rd party means.
@@ -14,8 +14,9 @@ the moving parts and decompose each image into foreground and background. The ou
 L1 objective function is arguably better at detecting outliers than L2 counter part.
 Due to the fact that there's no avaiable L1-PCA implementation, I have in fact implemented it using _numpy_ and _scipy_.
 ![1: Original Frame Vs Foreground Vs BackGround](example_1.png)
+*Original Frame Vs Foreground Vs BackGround: First Iteration*
 ![2: Original Frame Vs Foreground Vs BackGround](example_2.png)
-
+*Original Frame Vs Foreground Vs BackGround: 10th Iteration*
 
 ### Command:
 This application has two use cases: preprocess and remove background/foreground; hence, there are two main commands and one synthesis command.

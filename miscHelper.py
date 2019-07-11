@@ -43,7 +43,16 @@ class CliConfig:
                                     help="Specify output resolution for all image\
                                              frames; default is 120 by 160.",
                                     metavar=( "img_height", "img_width" ) )
-        
+
+        allParser.add_argument( "-k", "--component", default=5, type=int,
+                                    help="Advanced Setting: specify number of principal\
+                                            components for PCA; default is 5.",
+                                    metavar="component" )
+        allParser.add_argument( "-n", "--iteration", default=10, type=int,
+                                    help="Advanced Setting: specify number of gradient\
+                                            descent iterations for PCA; default is 10.",
+                                    metavar="iteration" )
+
         separateParser = subParsers.add_parser( "train" )
         separateParser.add_argument( "-d", "--data", default="*.pkl", type=str,
                                     help="Specify input .pkl file which contains\
@@ -59,6 +68,14 @@ class CliConfig:
                                     help="Specify the image resolution of the frames\
                                              in .pkl; default is 120 by 160.",
                                     metavar=( "img_height", "img_width" ) )
+        separateParser.add_argument( "-k", "--component", default=5, type=int,
+                                    help="Advanced Setting: specify number of principal\
+                                            components for PCA; default is 5.",
+                                    metavar="component" )
+        separateParser.add_argument( "-n", "--iteration", default=10, type=int,
+                                    help="Advanced Setting: specify number of gradient\
+                                            descent iterations for PCA; default is 10.",
+                                    metavar="iteration" )
 
         return vars( mainParser.parse_args() )
 

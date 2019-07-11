@@ -32,8 +32,7 @@ def main():
                 """.format( miscHelper.imgDim[ 0 ], miscHelper.imgDim[ 1 ] )
         
         ## TODO: add interactive check by displaying one reshaped image frame
-        nComp = 5
-        model = PCAL1( nComp, iteration=10 )
+        model = PCAL1( cli.config[ "component" ], iteration=cli.config[ "iteration" ] )
         frameDataNew = model.fitTransform( frameData, cli.config[ "size" ] )
 
         constructImageFrames( frameData, frameDataNew, 0.1, cli.config[ "size" ], cli.config[ "output" ] )
