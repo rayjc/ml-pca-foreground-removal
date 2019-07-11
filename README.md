@@ -34,7 +34,8 @@ This application has two use cases: preprocess and remove background/foreground;
         then separates foreground and background into _output/_.
         After executing the command, you may also consider checking _input-preprocessed/_ to get an idea what has been stored into the .pkl file.
 Note: All three commands can be ran without optional arguments. For the first trial run, I would recommend running `python removeForeground.py train`
-without any additional arguments. If your machine has more memory available, you could try running the larger _.pkl_ file.
+without any additional arguments. If your machine has more memory available, you could try running the larger _.pkl_ file. You can view help message
+by running `python removeForground.py --help`.
 
 ### Included:
 * source code
