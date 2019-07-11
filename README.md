@@ -13,10 +13,9 @@ However, I did include sample _.pkl_ files (represents sample pre-processed fram
 the moving parts and decompose each image into foreground and background. The output images are saved to _output/_. 
 L1 objective function is arguably better at detecting outliers than L2 counter part.
 Due to the fact that there's no avaiable L1-PCA implementation, I have in fact implemented it using _numpy_ and _scipy_.
-![Example Comparison 1](example_1.png)
-Format: ![1: Original Frame Vs Foreground Vs BackGround](url)
-![Example Comparison 2](example_2.png)
-Format: ![2: Original Frame Vs Foreground Vs BackGround](url)
+![1: Original Frame Vs Foreground Vs BackGround](example_1.png)
+![2: Original Frame Vs Foreground Vs BackGround](example_2.png)
+
 
 ### Command:
 This application has two use cases: preprocess and remove background/foreground; hence, there are two main commands and one synthesis command.
@@ -33,7 +32,7 @@ This application has two use cases: preprocess and remove background/foreground;
     * The above command specifies _input_ as the directory containing images, _unnamed_ as output .pkl name, and rescales frames to _160x120_ pixel;
         then separates foreground and background into _output/_.
         After executing the command, you may also consider checking _input-preprocessed/_ to get an idea what has been stored into the .pkl file.
-Note: All three commands can be ran without optional arguments. For the first trial run, I would recommend running `python removeForeground.py all`
+Note: All three commands can be ran without optional arguments. For the first trial run, I would recommend running `python removeForeground.py train`
 without any additional arguments. If your machine has more memory available, you could try running the larger _.pkl_ file.
 
 ### Included:
