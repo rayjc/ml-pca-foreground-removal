@@ -5,20 +5,26 @@ import numpy as np
 import miscHelper
 
 from pca import PCAL1
-from processFrames import constructImageFrames
-
-## TODO: move these to a different file
-## Helper functions
-def rgb2Grey( rgbImg ):
-    """ Given img matrix of sizeMxNx3, return greyscale image matrix of size MxN """
-    return np.dot( rgbImg[...,:3], [ 0.2989, 0.5870, 0.1140 ] )
+from processFrames import constructImageFrames, createPklFile
 
 def main():
 
     cli = miscHelper.CliConfig()
-    if cli.config[ "subParser" ] == "train":
-        with open( cli.config[ "data" ], "rb" ) as f:
-            frameData = pickle.load( f ).astype( float )/255
+
+    if cli.config[ "subParser" ] in ( "preprocess", "all" ):
+        pklFileName = createPklFile( cli.config[ "size" ], cli.config[ "input" ],
+                        cli.config[ "output" ] )
+        print( "Preprocess completed: image data has been compiled into ", pklFileName )
+
+    if cli.config[ "subParser" ] in ( "train", "all" ):
+        if cli.config[ "subParser" ] == "train":
+            ## Load pre-existing .pkl file
+            with open( cli.config[ "data" ], "rb" ) as f:
+                frameData = pickle.load( f ).astype( float )/255
+        else:
+            ## Load .pkl file created during preprocess stage of this session
+            with open( pklFileName, "rb" ) as f:
+                frameData = pickle.load( f ).astype( float )/255
         assert cli.config[ "size" ][ 0 ] * cli.config[ "size" ][ 1 ] == frameData.shape[ 1 ],\
                 """
                 The specified image resolution does not match data in .pkl file.
