@@ -33,8 +33,8 @@ This application has two use cases: preprocess and remove background/foreground;
     * The above command specifies _input_ as the directory containing images, _unnamed_ as output .pkl name, and rescales frames to _160x120_ pixel;
         then separates foreground and background into _output/_.
         After executing the command, you may also consider checking _input-preprocessed/_ to get an idea what has been stored into the .pkl file.
-Note: All three commands can be ran without optional arguments. For the first trial run, I would recommend running `python removeForeground.py train`
-without any additional arguments. If your machine has more memory available, you could try running the larger _.pkl_ file. You can view help message
+Note: All three commands can be ran without optional arguments. **For the first trial run, I would recommend running `python removeForeground.py train`
+without any additional arguments.** If your machine has more memory available, you could try running the larger _.pkl_ file. You can view help message
 by running `python removeForground.py --help`.
 
 ### Included:
